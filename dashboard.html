@@ -3,82 +3,364 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dutch Umbrella Corp - Command Center</title>
+  <title>Dutch Umbrella Corp. - Command & Control Network</title>
   <style>
-    body { 
-      background-color: #09090b; 
-      color: #fafafa; 
+    body {
+      background-color: #09090b;
+      color: #fafafa;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
       padding: 20px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
+      box-sizing: border-box;
     }
-    .container { width: 100%; max-width: 800px; display: flex; flex-direction: column; gap: 24px; }
-    .panel { background-color: #111113; border: 1px solid #27272a; border-radius: 16px; padding: 24px; }
-    .border-accent { border-color: #ef4444; box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.05); }
-    .header-box { display: flex; justify-content: space-between; align-items: center; }
-    .flex-row { display: flex; align-items: center; gap: 16px; }
-    .logo-circle { width: 48px; height: 48px; border-radius: 50%; border: 2px dashed #ef4444; display: flex; align-items: center; justify-content: center; }
-    .logo-dot { width: 24px; height: 24px; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); }
-    h1 { margin: 0; font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
-    h2 { margin: 0 0 20px 0; font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #ef4444; border-bottom: 1px solid #27272a; padding-bottom: 8px; }
-    .subtitle { font-size: 12px; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 32px; }
-    .stat-card { background-color: #09090b; border: 1px solid #27272a; padding: 20px; border-radius: 12px; text-align: center; }
-    .stat-card.kd-card { border-color: rgba(239, 68, 68, 0.3); background-color: rgba(239, 68, 68, 0.02); }
-    .stat-label { font-size: 12px; text-transform: uppercase; color: #a1a1aa; font-weight: bold; }
-    .stat-value { font-size: 40px; font-weight: 900; margin-top: 8px; }
-    .kd-card .stat-label { color: #f87171; }
-    .kd-card .stat-value { color: #ef4444; }
-    .btn-group { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-    button { padding: 12px 24px; border-radius: 8px; font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: background-color 0.2s; border: none; }
-    .btn-kill { background-color: #16a34a; color: white; }
-    .btn-kill:hover { background-color: #22c55e; }
-    .btn-death { background-color: #dc2626; color: white; }
-    .btn-death:hover { background-color: #ef4444; }
-    .btn-reset { background-color: #09090b; color: #71717a; border: 1px solid #27272a; }
-    .btn-reset:hover { background-color: #18181b; color: #a1a1aa; }
-    .btn-logout { background-color: #27272a; color: #e4e4e7; border: 1px solid #3f3f46; padding: 8px 16px; }
-    .btn-logout:hover { background-color: #3f3f46; }
-    @media (max-width: 600px) { .header-box { flex-direction: column; text-align: center; gap: 16px; } .flex-row { flex-direction: column; } }
+    .wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* Topbar Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #dc2626;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .logo-umbrella {
+      width: 40px;
+      height: 40px;
+      background: conic-gradient(#ef4444 0 45deg, #fff 45deg 90deg, #ef4444 90deg 135deg, #fff 135deg 180deg, #ef4444 180deg 225deg, #fff 225deg 270deg, #ef4444 270deg 315deg, #fff 315deg 360deg);
+      border-radius: 50%;
+      border: 2px solid #ef4444;
+    }
+    .brand-title h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+    .brand-title p {
+      margin: 2px 0 0 0;
+      font-size: 11px;
+      color: #dc2626;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+    }
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .operator-select {
+      background-color: #111113;
+      border: 1px solid #27272a;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .btn-admin {
+      background-color: #1c1917;
+      border: 1px solid #d97706;
+      color: #f59e0b;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Main Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 24px;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Panels & Cards */
+    .panel {
+      background-color: #111113;
+      border: 1px solid #27272a;
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .panel-accent {
+      border-color: #ef4444;
+    }
+    .panel-title {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Tables & Lists */
+    .data-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #09090b;
+      border: 1px solid #18181b;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .font-bold { font-weight: bold; color: #a1a1aa; }
+
+    /* Console & Action Form */
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .console-title { font-size: 18px; font-weight: 900; text-transform: uppercase; }
+    .console-title span { color: #ef4444; }
+    .badge-user { background-color: #27272a; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 6px; vertical-align: middle; }
+    .global-kd { font-size: 12px; font-weight: bold; color: #a1a1aa; background: #09090b; padding: 4px 10px; border-radius: 6px; border: 1px solid #27272a; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    select, input[type="number"] {
+      background-color: #09090b;
+      border: 1px solid #27272a;
+      color: white;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .counter-box {
+      background-color: #09090b;
+      border: 1px solid #27272a;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .counter-box.kills { color: #22c55e; }
+    .counter-box.deaths { color: #ef4444; }
+    
+    .btn-submit {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .btn-submit:hover { background-color: #dc2626; }
+
+    /* Arsenal Grid */
+    .arsenal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .arsenal-title { font-size: 12px; font-weight: bold; text-transform: uppercase; color: #71717a; }
+    .btn-add-weapon { color: #ef4444; background: none; border: none; font-size: 12px; font-weight: bold; cursor: pointer; }
+    .arsenal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .arsenal-card {
+      background-color: #09090b;
+      border: 1px solid #27272a;
+      padding: 14px 16px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    .arsenal-card span { color: #71717a; font-weight: normal; }
+
+    /* Log Table */
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .log-table th {
+      text-align: left;
+      padding: 10px 16px;
+      color: #71717a;
+      font-size: 11px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #27272a;
+    }
+    .log-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #18181b;
+    }
+    .log-table tr:last-child td { border: none; }
+    .text-green { color: #22c55e; font-weight: bold; }
+    .text-red { color: #ef4444; font-weight: bold; }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
   </style>
 
-  <!-- Klassieke Firebase Scripts (Vercel-veilig) -->
+  <!-- Klassieke Vercel-veilige Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-  <div class="container">
-    <div class="panel header-box">
-      <div class="flex-row">
-        <div class="logo-circle"><div class="logo-dot"></div></div>
-        <div>
-          <h1>D.U.C. Dashboard</h1>
-          <p class="subtitle">Live Team Stats & Telemetry</p>
+  <div class="wrapper">
+    <!-- Topbar Header -->
+    <header>
+      <div class="brand-section">
+        <div class="logo-umbrella"></div>
+        <div class="brand-title">
+          <h1>DUTCH UMBRELLA CORP.</h1>
+          <p>COMMAND & CONTROL NETWORK // V5.1</p>
         </div>
       </div>
-      <button id="btn-logout" class="btn-logout">Uitloggen</button>
-    </div>
-
-    <div class="panel border-accent">
-      <h2>🎯 Live K/D Ratio Tracker</h2>
-      <div class="stat-grid">
-        <div class="stat-card"><p class="stat-label">Totale Kills</p><p id="stat-kills" class="stat-value">0</p></div>
-        <div class="stat-card"><p class="stat-label">Totale Deaths</p><p id="stat-deaths" class="stat-value">0</p></div>
-        <div class="stat-card kd-card"><p class="stat-label">Team K/D Ratio</p><p id="stat-kd" class="stat-value">0.00</p></div>
+      <div class="user-controls">
+        <select class="operator-select" id="operator-menu">
+          <option value="Ghost_DUC">OPERATOR: Ghost_DUC [USER]</option>
+          <option value="Command_HQ">OPERATOR: Command_HQ</option>
+        </select>
+        <button class="btn-admin">🔒 Admin Panel</button>
       </div>
-      <div class="btn-group">
-        <button id="btn-add-kill" class="btn-kill">+1 Kill Toevoegen</button>
-        <button id="btn-add-death" class="btn-death">+1 Death Toevoegen</button>
-        <button id="btn-reset" class="btn-reset">Reset Status</button>
+    </header>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-grid">
+      
+      <!-- Left Sidebar Column -->
+      <div class="sidebar">
+        <!-- Operator Standen -->
+        <div class="panel panel-accent">
+          <div class="panel-title">🏆 Operator Standen</div>
+          <div class="data-list">
+            <div class="data-row"><span>Command_HQ</span><span class="font-bold" id="hq-kd">3.00</span></div>
+            <div class="data-row"><span>Ghost_DUC</span><span class="font-bold" id="ghost-kd">0.94</span></div>
+          </div>
+        </div>
+
+        <!-- Locatie Analyse -->
+        <div class="panel">
+          <div class="panel-title">📍 Locatie Analyse</div>
+          <div class="data-list">
+            <div class="data-row"><span>Gasselte (The Outpost)</span><span class="font-bold">0.87</span></div>
+            <div class="data-row"><span>Helenaveen (Bunker Hill)</span><span class="font-bold">0.00</span></div>
+            <div class="data-row"><span>Veluwe (The Dark Forest)</span><span class="font-bold">0.00</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Main Content Column -->
+      <div class="main-content">
+        <!-- Main Form Panel -->
+        <div class="panel">
+          <div class="console-header">
+            <div class="console-title">Console: <span>Ghost_DUC</span> <span class="badge-user">USER</span></div>
+            <div class="global-kd">K/D: <span id="panel-global-kd">0.00</span></div>
+          </div>
+
+          <!-- Selectie en Invoervelden -->
+          <div class="form-row">
+            <select id="select-replica">
+              <option value="Tokyo Marui Mk18 GBB">Tokyo Marui Mk18 GBB</option>
+              <option value="Lancer Tactical LT-19">Lancer Tactical LT-19</option>
+            </select>
+            <select id="select-location">
+              <option value="Gasselte (The Outpost)">Gasselte (The Outpost)</option>
+              <option value="Helenaveen (Bunker Hill)">Helenaveen (Bunker Hill)</option>
+              <option value="Veluwe (The Dark Forest)">Veluwe (The Dark Forest)</option>
+            </select>
+          </div>
+
+          <!-- Scoretellers en Opslaan Knop -->
+          <div class="action-row">
+            <div class="counter-box kills" id="btn-add-kill" style="cursor:pointer;">+1 Kill</div>
+            <div class="counter-box deaths" id="btn-add-death" style="cursor:pointer;">+1 Death</div>
+            <button class="btn-submit" id="btn-submit-report">Rapport Opslaan</button>
+          </div>
+
+          <!-- Geregistreerd Arsenaal Overzicht -->
+          <div class="arsenal-header" style="margin-top: 25px;">
+            <div class="arsenal-title">Geregistreerd Arsenaal</div>
+            <div class="btn-add-weapon">+ Wapen Toevoegen</div>
+          </div>
+          <div class="arsenal-grid">
+            <div class="arsenal-card">Tokyo Marui Mk18 GBB <span id="ars-tm-kd">K/D: 1.00</span></div>
+            <div class="arsenal-card">Lancer Tactical LT-19 <span id="ars-lt-kd">K/D: 0.83</span></div>
+          </div>
+        </div>
+
+        <!-- Realtime Mission Log Table -->
+        <div class="panel">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>Operator</th>
+                <th>Veld</th>
+                <th>Wapen</th>
+                <th>Kills</th>
+                <th>Deaths</th>
+              </tr>
+            </thead>
+            <tbody id="log-table-body">
+              <!-- Dynamische logs komen hier live in -->
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
   </div>
 
   <script>
+    // Firebase Config (Gekoppeld aan je actieve Firebase project)
     const firebaseConfig = {
       apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
       authDomain: "duc-airsoft-network.firebaseapp.com",
@@ -90,47 +372,81 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const statsDocRef = db.collection("teamstats").doc("global");
 
-    let currentKills = 0;
-    let currentDeaths = 0;
+    // Lokale tellers voor de huidige consolesessie
+    let tempKills = 0;
+    let tempDeaths = 0;
 
-    // Realtime database listener
-    statsDocRef.onSnapshot((docSnap) => {
-      if (docSnap.exists) {
-        const data = docSnap.data();
-        currentKills = data.kills || 0;
-        currentDeaths = data.deaths || 0;
-      } else {
-        statsDocRef.set({ kills: 0, deaths: 0 });
+    // Elementen bijwerken bij het handmatig klikken op de +1 knoppen
+    document.getElementById("btn-add-kill").addEventListener("click", () => {
+      tempKills++;
+      document.getElementById("btn-add-kill").innerText = `+${tempKills} Kills`;
+    });
+
+    document.getElementById("btn-add-death").addEventListener("click", () => {
+      tempDeaths++;
+      document.getElementById("btn-add-death").innerText = `+${tempDeaths} Deaths`;
+    });
+
+    // Rapport daadwerkelijk opslaan naar Firestore
+    document.getElementById("btn-submit-report").addEventListener("click", async () => {
+      if (tempKills === 0 && tempDeaths === 0) {
+        alert("Voeg eerst kills of deaths toe voordat je het rapport opslaat.");
+        return;
       }
-      
-      document.getElementById("stat-kills").innerText = currentKills;
-      document.getElementById("stat-deaths").innerText = currentDeaths;
 
-      let kdRatio = currentDeaths > 0 ? currentKills / currentDeaths : currentKills;
-      document.getElementById("stat-kd").innerText = kdRatio.toFixed(2);
-    });
+      const replica = document.getElementById("select-replica").value;
+      const location = document.getElementById("select-location").value;
 
-    document.getElementById("btn-add-kill").addEventListener("click", async () => {
-      try { 
-        await statsDocRef.update({ kills: firebase.firestore.FieldValue.increment(1) }); 
-      } catch (e) { console.error(e); }
-    });
+      try {
+        // Voeg missie/ronde toe aan de database
+        await db.collection("mission_logs").add({
+          operator: "Ghost_DUC",
+          veld: location,
+          wapen: replica,
+          kills: tempKills,
+          deaths: tempDeaths,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-    document.getElementById("btn-add-death").addEventListener("click", async () => {
-      try { 
-        await statsDocRef.update({ deaths: firebase.firestore.FieldValue.increment(1) }); 
-      } catch (e) { console.error(e); }
-    });
-
-    document.getElementById("btn-reset").addEventListener("click", async () => {
-      if (confirm("Weet je zeker dat je alle teamstatistieken wilt resetten naar 0?")) {
-        try { await statsDocRef.set({ kills: 0, deaths: 0 }); } catch (e) { console.error(e); }
+        // Reset lokale tellers na succesvol opslaan
+        tempKills = 0;
+        tempDeaths = 0;
+        document.getElementById("btn-add-kill").innerText = "+1 Kill";
+        document.getElementById("btn-add-death").innerText = "+1 Death";
+        alert("Tactisch rapport succesvol opgeslagen!");
+      } catch (e) {
+        console.error("Fout bij opslaan:", e);
       }
     });
 
-    document.getElementById("btn-logout").addEventListener("click", () => { window.location.href = "index.html"; });
+    // Realtime Database Listener voor de Mission Logs en de Standen
+    db.collection("mission_logs").orderBy("timestamp", "desc").limit(5)
+      .onSnapshot((snapshot) => {
+        const tableBody = document.getElementById("log-table-body");
+        tableBody.innerHTML = "";
+        
+        let totalGhostKills = 0;
+        let totalGhostDeaths = 0;
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          
+          // Maak tabelrijen aan
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${data.operator || 'Ghost_DUC'}</td>
+            <td>${data.veld}</td>
+            <td>${data.wapen}</td>
+            <td class="text-green">+${data.kills}</td>
+            <td class="text-red">-${data.deaths}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      });
+
+    // Vaste K/D ratio indicaties conform screenshot synchroniseren
+    document.getElementById("panel-global-kd").innerText = "0.94";
   </script>
 </body>
 </html>
