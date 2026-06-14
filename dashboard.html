@@ -5,291 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dutch Umbrella Corp. - Command & Control Network</title>
   <style>
-    body {
-      background-color: #09090b;
-      color: #fafafa;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .wrapper {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+    body { background-color: #09090b; color: #fafafa; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 20px; box-sizing: border-box; }
+    .wrapper { max-width: 1400px; margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #dc2626; padding-bottom: 15px; margin-bottom: 25px; }
+    .brand-section { display: flex; align-items: center; gap: 15px; }
+    .logo-umbrella { width: 40px; height: 40px; background: conic-gradient(#ef4444 0 45deg, #fff 45deg 90deg, #ef4444 90deg 135deg, #fff 135deg 180deg, #ef4444 180deg 225deg, #fff 225deg 270deg, #ef4444 270deg 315deg, #fff 315deg 360deg); border-radius: 50%; border: 2px solid #ef4444; }
+    .brand-title h1 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 0.05em; }
+    .brand-title p { margin: 2px 0 0 0; font-size: 11px; color: #dc2626; font-weight: bold; letter-spacing: 0.1em; }
+    .user-controls { display: flex; align-items: center; gap: 12px; }
     
-    /* Topbar Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #dc2626;
-      padding-bottom: 15px;
-      margin-bottom: 25px;
-    }
-    .brand-section {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .logo-umbrella {
-      width: 40px;
-      height: 40px;
-      background: conic-gradient(#ef4444 0 45deg, #fff 45deg 90deg, #ef4444 90deg 135deg, #fff 135deg 180deg, #ef4444 180deg 225deg, #fff 225deg 270deg, #ef4444 270deg 315deg, #fff 315deg 360deg);
-      border-radius: 50%;
-      border: 2px solid #ef4444;
-    }
-    .brand-title h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-    }
-    .brand-title p {
-      margin: 2px 0 0 0;
-      font-size: 11px;
-      color: #dc2626;
-      font-weight: bold;
-      letter-spacing: 0.1em;
-    }
-    .user-controls {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .operator-select {
-      background-color: #111113;
-      border: 1px solid #27272a;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 13px;
-    }
-    .btn-admin {
-      background-color: #1c1917;
-      border: 1px solid #d97706;
-      color: #f59e0b;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    .btn-admin { display: none; background-color: #1c1917; border: 1px solid #d97706; color: #f59e0b; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+    .btn-logout { background-color: #27272a; color: white; border: 1px solid #3f3f46; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
 
-    /* Main Grid Layout */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 24px;
-    }
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .main-content {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    /* Panels & Cards */
-    .panel {
-      background-color: #111113;
-      border: 1px solid #27272a;
-      border-radius: 12px;
-      padding: 20px;
-    }
-    .panel-accent {
-      border-color: #ef4444;
-    }
-    .panel-title {
-      font-size: 13px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    /* Tables & Lists */
-    .data-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #09090b;
-      border: 1px solid #18181b;
-      padding: 12px 16px;
-      border-radius: 6px;
-      font-size: 13px;
-    }
+    .dashboard-grid { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
+    .sidebar { display: flex; flex-direction: column; gap: 24px; }
+    .main-content { display: flex; flex-direction: column; gap: 24px; }
+    .panel { background-color: #111113; border: 1px solid #27272a; border-radius: 12px; padding: 20px; }
+    .panel-accent { border-color: #ef4444; }
+    .panel-title { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+    .data-list { display: flex; flex-direction: column; gap: 10px; }
+    .data-row { display: flex; justify-content: space-between; align-items: center; background-color: #09090b; border: 1px solid #18181b; padding: 12px 16px; border-radius: 6px; font-size: 13px; }
     .font-bold { font-weight: bold; color: #ffffff; }
-
-    /* Console & Action Form */
-    .console-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
+    .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .console-title { font-size: 18px; font-weight: 900; text-transform: uppercase; }
     .console-title span { color: #ef4444; }
-    .badge-user { background-color: #27272a; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 6px; vertical-align: middle; }
     .global-kd { font-size: 11px; font-weight: bold; color: #ffffff; background: #09090b; padding: 4px 10px; border-radius: 4px; border: 1px solid #27272a; }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    select {
-      background-color: #09090b;
-      border: 1px solid #27272a;
-      color: white;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    
-    /* Gecorrigeerde Knoppen conform screenshot */
-    .action-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1.2fr;
-      gap: 16px;
-    }
-    .counter-box {
-      border: 1px solid #27272a;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 900;
-      text-transform: uppercase;
-      padding: 14px;
-    }
-    .counter-box.kills { 
-      background-color: rgba(22, 163, 74, 0.15); 
-      border-color: #16a34a; 
-      color: #22c55e; 
-    }
-    .counter-box.deaths { 
-      background-color: rgba(220, 38, 38, 0.15); 
-      border-color: #dc2626; 
-      color: #ef4444; 
-    }
-    
-    .btn-submit {
-      background-color: #f43f5e;
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 6px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .btn-submit:hover { background-color: #e11d48; }
-
-    /* Arsenal Grid */
-    .arsenal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .arsenal-title { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #71717a; letter-spacing: 0.05em; }
-    .btn-add-weapon { color: #ef4444; background: none; border: none; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-    .arsenal-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    .arsenal-card {
-      background-color: #09090b;
-      border: 1px solid #27272a;
-      padding: 14px 16px;
-      border-radius: 6px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      font-weight: bold;
-    }
-    .arsenal-card span { color: #71717a; font-weight: normal; font-size: 11px; }
-
-    /* Log Table */
-    .log-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .log-table th {
-      text-align: left;
-      padding: 10px 16px;
-      color: #71717a;
-      font-size: 11px;
-      text-transform: uppercase;
-      border-bottom: 1px solid #27272a;
-      letter-spacing: 0.05em;
-    }
-    .log-table td {
-      padding: 14px 16px;
-      border-bottom: 1px solid #18181b;
-      color: #a1a1aa;
-    }
-    .log-table tr:last-child td { border: none; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    select { background-color: #09090b; border: 1px solid #27272a; color: white; padding: 12px; border-radius: 6px; font-size: 13px; width: 100%; box-sizing: border-box; }
+    .action-row { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 16px; }
+    .counter-box { border: 1px solid #27272a; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; text-transform: uppercase; padding: 14px; }
+    .counter-box.kills { background-color: rgba(22, 163, 74, 0.15); border-color: #16a34a; color: #22c55e; }
+    .counter-box.deaths { background-color: rgba(220, 38, 38, 0.15); border-color: #dc2626; color: #ef4444; }
+    .btn-submit { background-color: #f43f5e; color: white; border: none; padding: 14px; border-radius: 6px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-size: 13px; }
+    .arsenal-header { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; margin-bottom: 15px; }
+    .arsenal-title { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #71717a; }
+    .arsenal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .arsenal-card { background-color: #09090b; border: 1px solid #27272a; padding: 14px 16px; border-radius: 6px; display: flex; justify-content: space-between; font-size: 13px; font-weight: bold; }
+    .arsenal-card span { color: #71717a; font-size: 11px; }
+    .log-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .log-table th { text-align: left; padding: 10px 16px; color: #71717a; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid #27272a; }
+    .log-table td { padding: 14px 16px; border-bottom: 1px solid #18181b; color: #a1a1aa; }
     .text-green { color: #22c55e; font-weight: bold; }
     .text-red { color: #ef4444; font-weight: bold; }
-
-    @media (max-width: 1024px) {
-      .dashboard-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
   </style>
-
-  <!-- Klassieke Vercel-veilige Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-
   <div class="wrapper">
-    <!-- Topbar Header -->
     <header>
       <div class="brand-section">
         <div class="logo-umbrella"></div>
         <div class="brand-title">
           <h1>DUTCH UMBRELLA CORP.</h1>
-          <p>COMMAND & CONTROL NETWORK // V5.1</p>
+          <p>COMMAND & CONTROL NETWORK // V5.3</p>
         </div>
       </div>
       <div class="user-controls">
-        <select class="operator-select" id="operator-menu">
-          <option value="Command_HQ">OPERATOR: Command_HQ</option>
-          <option value="Ghost_DUC">OPERATOR: Ghost_DUC [USER]</option>
-        </select>
-        <button class="btn-admin">🔒 Admin Panel</button>
+        <span id="display-user" style="font-size:12px; font-weight:bold; color:#71717a; margin-right:10px;">Laden...</span>
+        <button class="btn-admin" id="admin-panel-btn">🔒 Admin Panel</button>
+        <button class="btn-logout" id="logout-btn">Uitloggen</button>
       </div>
     </header>
 
-    <!-- Main Content Grid -->
     <div class="dashboard-grid">
-      
-      <!-- Left Sidebar Column -->
       <div class="sidebar">
-        <!-- Operator Standen -->
         <div class="panel panel-accent">
           <div class="panel-title">🏆 Operator Standen</div>
           <div class="data-list">
@@ -297,8 +79,6 @@
             <div class="data-row"><span>Ghost_DUC</span><span class="font-bold">0.94</span></div>
           </div>
         </div>
-
-        <!-- Locatie Analyse -->
         <div class="panel">
           <div class="panel-title">📍 Locatie Analyse</div>
           <div class="data-list">
@@ -309,16 +89,12 @@
         </div>
       </div>
 
-      <!-- Right Main Content Column -->
       <div class="main-content">
-        <!-- Main Form Panel -->
         <div class="panel">
           <div class="console-header">
-            <div class="console-title">Console: <span>Ghost_DUC</span> <span class="badge-user">USER</span></div>
+            <div class="console-title">Console: <span id="console-username">Laden...</span></div>
             <div class="global-kd">K/D: <span>0.94</span></div>
           </div>
-
-          <!-- Selectie en Invoervelden -->
           <div class="form-row">
             <select id="select-replica">
               <option value="Tokyo Marui Mk18 GBB">Tokyo Marui Mk18 GBB</option>
@@ -330,121 +106,9 @@
               <option value="Veluwe (The Dark Forest)">Veluwe (The Dark Forest)</option>
             </select>
           </div>
-
-          <!-- Scoretellers en Opslaan Knop -->
           <div class="action-row">
             <div class="counter-box kills" id="btn-add-kill" style="cursor:pointer;">+1 Kill</div>
             <div class="counter-box deaths" id="btn-add-death" style="cursor:pointer;">+1 Death</div>
             <button class="btn-submit" id="btn-submit-report">Rapport Opslaan</button>
           </div>
-
-          <!-- Geregistreerd Arsenaal Overzicht -->
-          <div class="arsenal-header" style="margin-top: 25px;">
-            <div class="arsenal-title">Geregistreerd Arsenaal</div>
-            <div class="btn-add-weapon">+ Wapen Toevoegen</div>
-          </div>
-          <div class="arsenal-grid">
-            <div class="arsenal-card">Tokyo Marui Mk18 GBB <span>K/D: 1.00</span></div>
-            <div class="arsenal-card">Lancer Tactical LT-19 <span>K/D: 0.83</span></div>
-          </div>
-        </div>
-
-        <!-- Realtime Mission Log Table -->
-        <div class="panel">
-          <table class="log-table">
-            <thead>
-              <tr>
-                <th>Operator</th>
-                <th>Veld</th>
-                <th>Wapen</th>
-                <th>Kills</th>
-                <th>Deaths</th>
-              </tr>
-            </thead>
-            <tbody id="log-table-body">
-              <!-- Gekoppelde data uit Firebase komt hier live in -->
-            </tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
-      authDomain: "duc-airsoft-network.firebaseapp.com",
-      projectId: "duc-airsoft-network",
-      storageBucket: "duc-airsoft-network.firebasestorage.app",
-      messagingSenderId: "208621488866",
-      appId: "1:208621488866:web:4c2a3db3f659167211acbb"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    let tempKills = 0;
-    let tempDeaths = 0;
-
-    document.getElementById("btn-add-kill").addEventListener("click", () => {
-      tempKills++;
-      document.getElementById("btn-add-kill").innerText = `+${tempKills} Kills`;
-    });
-
-    document.getElementById("btn-add-death").addEventListener("click", () => {
-      tempDeaths++;
-      document.getElementById("btn-add-death").innerText = `+${tempDeaths} Deaths`;
-    });
-
-    document.getElementById("btn-submit-report").addEventListener("click", async () => {
-      if (tempKills === 0 && tempDeaths === 0) {
-        alert("Voeg eerst kills of deaths toe voordat je het rapport opslaat.");
-        return;
-      }
-
-      const replica = document.getElementById("select-replica").value;
-      const location = document.getElementById("select-location").value;
-
-      try {
-        await db.collection("mission_logs").add({
-          operator: "Ghost_DUC",
-          veld: location,
-          wapen: replica,
-          kills: tempKills,
-          deaths: tempDeaths,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        tempKills = 0;
-        tempDeaths = 0;
-        document.getElementById("btn-add-kill").innerText = "+1 Kill";
-        document.getElementById("btn-add-death").innerText = "+1 Death";
-        alert("Tactisch rapport succesvol opgeslagen!");
-      } catch (e) {
-        console.error("Fout bij opslaan:", e);
-      }
-    });
-
-    // Realtime synchronisatie van de tabel onderaan met de database
-    db.collection("mission_logs").orderBy("timestamp", "desc").limit(5)
-      .onSnapshot((snapshot) => {
-        const tableBody = document.getElementById("log-table-body");
-        tableBody.innerHTML = "";
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${data.operator || 'Ghost_DUC'}</td>
-            <td>${data.veld}</td>
-            <td>${data.wapen}</td>
-            <td class="text-green">+${data.kills}</td>
-            <td class="text-red">-${data.deaths}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      });
-  </script>
-</body>
-</html>
+          <div class="
