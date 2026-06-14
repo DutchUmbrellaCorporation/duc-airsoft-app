@@ -76,7 +76,6 @@
     .nav-link:hover { color: #a1a1aa; }
   </style>
 
-  <!-- Klassieke Firebase Scripts (Vercel-veilig) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
@@ -102,6 +101,7 @@
   </div>
 
   <script>
+    // Jouw Firebase configuratie
     const firebaseConfig = {
       apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
       authDomain: "duc-airsoft-network.firebaseapp.com",
@@ -111,41 +111,47 @@
       appId: "1:208621488866:web:4c2a3db3f659167211acbb"
     };
 
-    // Firebase initialiseren via compat-methode
+    // Firebase correct opstarten volgens de compat-methode
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
 
     // Inloggen
-    document.getElementById("btn-login").addEventListener("click", async () => {
+    document.getElementById("btn-login").addEventListener("click", function() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       
-      try {
-        await auth.signInWithEmailAndPassword(email, password);
-        window.location.href = "dashboard.html";
-      } catch (error) {
-        alert("Toegang geweigerd: Controleer je e-mail of code.");
+      if (!email || !password) {
+        alert("Vul een e-mailadres en toegangscode in.");
+        return;
       }
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function() {
+          window.location.href = "dashboard.html";
+        })
+        .catch(function(error) {
+          alert("Toegang geweigerd: " + error.message);
+        });
     });
 
     // Registreren
-    document.getElementById("link-register").addEventListener("click", async (e) => {
+    document.getElementById("link-register").addEventListener("click", function(e) {
       e.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       
-      if(!email || !password) {
+      if (!email || !password) {
         alert("Vul eerst een e-mail en wachtwoord in om te registreren.");
         return;
       }
       
-      try {
-        await auth.createUserWithEmailAndPassword(email, password);
-        alert("Operator succesvol geregistreerd! Je bent nu ingelogd.");
-        window.location.href = "dashboard.html";
-      } catch (error) {
-        alert("Registratie mislukt: " + error.message);
-      }
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(function() {
+          alert("Operator succesvol geregistreerd! Je wordt nu doorgestuurd.");
+          window.location.href = "dashboard.html";
+        })
+        .catch(function(error) {
+          alert("Registratie mislukt: " + error.message);
+        });
     });
   </script>
 
