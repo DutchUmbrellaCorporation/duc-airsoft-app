@@ -131,7 +131,7 @@
       border-radius: 6px;
       font-size: 13px;
     }
-    .font-bold { font-weight: bold; color: #a1a1aa; }
+    .font-bold { font-weight: bold; color: #ffffff; }
 
     /* Console & Action Form */
     .console-header {
@@ -143,7 +143,7 @@
     .console-title { font-size: 18px; font-weight: 900; text-transform: uppercase; }
     .console-title span { color: #ef4444; }
     .badge-user { background-color: #27272a; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 6px; vertical-align: middle; }
-    .global-kd { font-size: 12px; font-weight: bold; color: #a1a1aa; background: #09090b; padding: 4px 10px; border-radius: 6px; border: 1px solid #27272a; }
+    .global-kd { font-size: 11px; font-weight: bold; color: #ffffff; background: #09090b; padding: 4px 10px; border-radius: 4px; border: 1px solid #27272a; }
 
     .form-row {
       display: grid;
@@ -151,7 +151,7 @@
       gap: 16px;
       margin-bottom: 16px;
     }
-    select, input[type="number"] {
+    select {
       background-color: #09090b;
       border: 1px solid #27272a;
       color: white;
@@ -161,37 +161,48 @@
       width: 100%;
       box-sizing: border-box;
     }
+    
+    /* Gecorrigeerde Knoppen conform screenshot */
     .action-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1.2fr;
       gap: 16px;
     }
     .counter-box {
-      background-color: #09090b;
       border: 1px solid #27272a;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 900;
+      text-transform: uppercase;
+      padding: 14px;
     }
-    .counter-box.kills { color: #22c55e; }
-    .counter-box.deaths { color: #ef4444; }
+    .counter-box.kills { 
+      background-color: rgba(22, 163, 74, 0.15); 
+      border-color: #16a34a; 
+      color: #22c55e; 
+    }
+    .counter-box.deaths { 
+      background-color: rgba(220, 38, 38, 0.15); 
+      border-color: #dc2626; 
+      color: #ef4444; 
+    }
     
     .btn-submit {
-      background-color: #ef4444;
+      background-color: #f43f5e;
       color: white;
       border: none;
-      padding: 12px;
+      padding: 14px;
       border-radius: 6px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       cursor: pointer;
-      font-size: 12px;
+      font-size: 13px;
     }
-    .btn-submit:hover { background-color: #dc2626; }
+    .btn-submit:hover { background-color: #e11d48; }
 
     /* Arsenal Grid */
     .arsenal-header {
@@ -200,8 +211,8 @@
       align-items: center;
       margin-bottom: 15px;
     }
-    .arsenal-title { font-size: 12px; font-weight: bold; text-transform: uppercase; color: #71717a; }
-    .btn-add-weapon { color: #ef4444; background: none; border: none; font-size: 12px; font-weight: bold; cursor: pointer; }
+    .arsenal-title { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #71717a; letter-spacing: 0.05em; }
+    .btn-add-weapon { color: #ef4444; background: none; border: none; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
     .arsenal-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -217,7 +228,7 @@
       font-size: 13px;
       font-weight: bold;
     }
-    .arsenal-card span { color: #71717a; font-weight: normal; }
+    .arsenal-card span { color: #71717a; font-weight: normal; font-size: 11px; }
 
     /* Log Table */
     .log-table {
@@ -232,16 +243,17 @@
       font-size: 11px;
       text-transform: uppercase;
       border-bottom: 1px solid #27272a;
+      letter-spacing: 0.05em;
     }
     .log-table td {
       padding: 14px 16px;
       border-bottom: 1px solid #18181b;
+      color: #a1a1aa;
     }
     .log-table tr:last-child td { border: none; }
     .text-green { color: #22c55e; font-weight: bold; }
     .text-red { color: #ef4444; font-weight: bold; }
 
-    /* Mobile Responsive */
     @media (max-width: 1024px) {
       .dashboard-grid { grid-template-columns: 1fr; }
     }
@@ -265,8 +277,8 @@
       </div>
       <div class="user-controls">
         <select class="operator-select" id="operator-menu">
-          <option value="Ghost_DUC">OPERATOR: Ghost_DUC [USER]</option>
           <option value="Command_HQ">OPERATOR: Command_HQ</option>
+          <option value="Ghost_DUC">OPERATOR: Ghost_DUC [USER]</option>
         </select>
         <button class="btn-admin">🔒 Admin Panel</button>
       </div>
@@ -281,8 +293,8 @@
         <div class="panel panel-accent">
           <div class="panel-title">🏆 Operator Standen</div>
           <div class="data-list">
-            <div class="data-row"><span>Command_HQ</span><span class="font-bold" id="hq-kd">3.00</span></div>
-            <div class="data-row"><span>Ghost_DUC</span><span class="font-bold" id="ghost-kd">0.94</span></div>
+            <div class="data-row"><span>Command_HQ</span><span class="font-bold">3.00</span></div>
+            <div class="data-row"><span>Ghost_DUC</span><span class="font-bold">0.94</span></div>
           </div>
         </div>
 
@@ -303,7 +315,7 @@
         <div class="panel">
           <div class="console-header">
             <div class="console-title">Console: <span>Ghost_DUC</span> <span class="badge-user">USER</span></div>
-            <div class="global-kd">K/D: <span id="panel-global-kd">0.00</span></div>
+            <div class="global-kd">K/D: <span>0.94</span></div>
           </div>
 
           <!-- Selectie en Invoervelden -->
@@ -332,8 +344,8 @@
             <div class="btn-add-weapon">+ Wapen Toevoegen</div>
           </div>
           <div class="arsenal-grid">
-            <div class="arsenal-card">Tokyo Marui Mk18 GBB <span id="ars-tm-kd">K/D: 1.00</span></div>
-            <div class="arsenal-card">Lancer Tactical LT-19 <span id="ars-lt-kd">K/D: 0.83</span></div>
+            <div class="arsenal-card">Tokyo Marui Mk18 GBB <span>K/D: 1.00</span></div>
+            <div class="arsenal-card">Lancer Tactical LT-19 <span>K/D: 0.83</span></div>
           </div>
         </div>
 
@@ -350,7 +362,7 @@
               </tr>
             </thead>
             <tbody id="log-table-body">
-              <!-- Dynamische logs komen hier live in -->
+              <!-- Gekoppelde data uit Firebase komt hier live in -->
             </tbody>
           </table>
         </div>
@@ -360,7 +372,6 @@
   </div>
 
   <script>
-    // Firebase Config (Gekoppeld aan je actieve Firebase project)
     const firebaseConfig = {
       apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
       authDomain: "duc-airsoft-network.firebaseapp.com",
@@ -373,11 +384,9 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Lokale tellers voor de huidige consolesessie
     let tempKills = 0;
     let tempDeaths = 0;
 
-    // Elementen bijwerken bij het handmatig klikken op de +1 knoppen
     document.getElementById("btn-add-kill").addEventListener("click", () => {
       tempKills++;
       document.getElementById("btn-add-kill").innerText = `+${tempKills} Kills`;
@@ -388,7 +397,6 @@
       document.getElementById("btn-add-death").innerText = `+${tempDeaths} Deaths`;
     });
 
-    // Rapport daadwerkelijk opslaan naar Firestore
     document.getElementById("btn-submit-report").addEventListener("click", async () => {
       if (tempKills === 0 && tempDeaths === 0) {
         alert("Voeg eerst kills of deaths toe voordat je het rapport opslaat.");
@@ -399,7 +407,6 @@
       const location = document.getElementById("select-location").value;
 
       try {
-        // Voeg missie/ronde toe aan de database
         await db.collection("mission_logs").add({
           operator: "Ghost_DUC",
           veld: location,
@@ -409,7 +416,6 @@
           timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Reset lokale tellers na succesvol opslaan
         tempKills = 0;
         tempDeaths = 0;
         document.getElementById("btn-add-kill").innerText = "+1 Kill";
@@ -420,19 +426,14 @@
       }
     });
 
-    // Realtime Database Listener voor de Mission Logs en de Standen
+    // Realtime synchronisatie van de tabel onderaan met de database
     db.collection("mission_logs").orderBy("timestamp", "desc").limit(5)
       .onSnapshot((snapshot) => {
         const tableBody = document.getElementById("log-table-body");
         tableBody.innerHTML = "";
-        
-        let totalGhostKills = 0;
-        let totalGhostDeaths = 0;
 
         snapshot.forEach((doc) => {
           const data = doc.data();
-          
-          // Maak tabelrijen aan
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${data.operator || 'Ghost_DUC'}</td>
@@ -444,9 +445,6 @@
           tableBody.appendChild(row);
         });
       });
-
-    // Vaste K/D ratio indicaties conform screenshot synchroniseren
-    document.getElementById("panel-global-kd").innerText = "0.94";
   </script>
 </body>
 </html>
