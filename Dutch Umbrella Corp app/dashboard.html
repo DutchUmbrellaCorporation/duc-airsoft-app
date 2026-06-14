@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dutch Umbrella Corp - Command Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0c0c0e; color: #e4e4e7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .bg-umbrella-panel { background-color: #151518; border: 1px solid #27272a; }
+        .bg-umbrella-dark { background-color: #0b0b0d; }
+        .border-umbrella { border-color: #27272a; }
+        .accent-red { color: #f43f5e; }
+        .bg-accent-red { background-color: #e11d48; }
+        .admin-glow { box-shadow: 0 0 15px rgba(225, 29, 72, 0.15); border-color: rgba(225, 29, 72, 0.4); }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header id="app-header" class="max-w-7xl mx-auto mb-8 flex flex-col lg:flex-row justify-between items-center border-b border-zinc-800 pb-4 gap-4">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-red-600 relative">
+                <div class="absolute w-full h-full bg-red-600 transform rotate-45 scale-75"></div>
+                <div class="absolute w-full h-full bg-white transform -rotate-45 scale-50"></div>
+                <div class="w-4 h-4 rounded-full bg-black z-10"></div>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold tracking-wider text-white">DUTCH UMBRELLA CORP.</h1>
+                <p class="text-xs tracking-widest text-red-500 font-semibold">COMMAND & CONTROL NETWORK // V5.1</p>
+            </div>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-1 flex items-center space-x-2">
+                <label class="text-[11px] uppercase text-zinc-500 font-bold">Operator:</label>
+                <select id="current-user-select" onchange="switchUser()" class="bg-transparent text-sm font-semibold text-white focus:outline-none cursor-pointer"></select>
+            </div>
+            <button onclick="toggleAdminPanel()" id="btn-admin-gate" class="text-xs font-bold px-3 py-1.5 rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-400 hover:text-red-400 transition">
+                🔒 Admin Panel
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="space-y-6">
+            <!-- LEADERBOARD -->
+            <div id="panel-leaderboard" class="bg-umbrella-panel p-6 rounded-xl border-t-2 border-red-600">
+                <h2 class="text-md font-bold text-white uppercase flex justify-between mb-2">🏆 Operator Standen</h2>
+                <div id="leaderboard-list" class="space-y-2"></div>
+            </div>
+
+            <!-- VELDEN STATS -->
+            <div class="bg-umbrella-panel p-6 rounded-xl">
+                <h2 class="text-md font-bold text-white uppercase mb-2">📍 Locatie Analyse</h2>
+                <div id="fields-stats-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2 space-y-6">
+            <!-- WORKSTATION -->
+            <div id="panel-workstation" class="bg-umbrella-panel p-6 rounded-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold text-white uppercase">Console: <span id="dashboard-user-title" class="text-red-500">...</span> <span id="user-role-badge" class="ml-2 text-[9px] bg-zinc-800 px-1.5 py-0.5 rounded">USER</span></h2>
+                    <div class="text-xs bg-umbrella-dark px-3 py-1 rounded font-mono">K/D: <span id="user-local-kd">0.00</span></div>
+                </div>
+
+                <!-- FORM -->
+                <div class="p-4 rounded-xl bg-umbrella-dark border border-umbrella mb-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <select id="skirm-replica-select" class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"></select>
+                        <select id="skirm-field-select" class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white">
+                            <option value="Gasselte (The Outpost)">Gasselte (The Outpost)</option>
+                            <option value="Helenaveen (Bunker Hill)">Helenaveen (Bunker Hill)</option>
+                            <option value="Veluwe (The Dark Forest)">Veluwe (The Dark Forest)</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 items-end">
+                        <input type="number" id="skirm-kills" value="0" class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-center text-green-400 font-bold">
+                        <input type="number" id="skirm-deaths" value="0" class="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-center text-red-400 font-bold">
+                        <button onclick="logSkirm()" class="bg-accent-red text-white text-xs font-bold py-2 rounded">Rapport Opslaan</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-xs font-bold uppercase text-zinc-400">Geregistreerd Arsenaal</h3>
+                    <button onclick="promptNewReplica()" class="text-xs text-red-400">+ Wapen Toevoegen</button>
+                </div>
+                <div id="user-replica-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            </div>
+
+            <!-- STREAM FEED -->
+            <div id="panel-logs" class="bg-umbrella-panel p-6 rounded-xl">
+                <div class="overflow-x-auto rounded-lg border border-umbrella bg-umbrella-dark">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-zinc-900 text-zinc-400 text-[10px] uppercase border-b border-umbrella">
+                            <tr>
+                                <th class="p-3">Operator</th>
+                                <th class="p-3">Veld</th>
+                                <th class="p-3">Wapen</th>
+                                <th class="p-3 text-center">Kills</th>
+                                <th class="p-3 text-center">Deaths</th>
+                                <th id="th-admin-actions" class="p-3 text-center hidden text-red-400">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="global-activity-tbody" class="divide-y divide-zinc-800 font-mono"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const defaultData = {
+            isAdminAuthenticated: false, activeUserId: "user_1",
+            players: {
+                "user_1": { id: "user_1", name: "Ghost_DUC", role: "USER", replicas: [{ id: "r1", name: "Tokyo Marui Mk18 GBB", type: "GBB", kills: 32, deaths: 14 }, { id: "r2", name: "Lancer Tactical LT-19", type: "AEG", kills: 15, deaths: 18 }] },
+                "user_admin": { id: "user_admin", name: "Command_HQ", role: "ADMIN", replicas: [{ id: "r_adm", name: "Umbrella Custom M4", type: "AEG", kills: 12, deaths: 4 }] }
+            },
+            globalLogs: [
+                { id: "log_1", playerId: "user_1", playerName: "Ghost_DUC", fieldName: "Gasselte (The Outpost)", replicaId: "r1", replicaName: "Tokyo Marui Mk18 GBB", kills: 18, deaths: 3 }
+            ]
+        };
+
+        let db = JSON.parse(localStorage.getItem('duc_secure_auth_db')) || defaultData;
+        db.isAdminAuthenticated = false;
+
+        function save() { localStorage.setItem('duc_secure_auth_db', JSON.stringify(db)); render(); }
+
+        function toggleAdminPanel() {
+            const currentPlayer = db.players[db.activeUserId];
+            if (db.isAdminAuthenticated) { db.isAdminAuthenticated = false; save(); return; }
+            if (currentPlayer.role !== "ADMIN") { alert("Toegang geweigerd: Je bent geen ADMIN profile."); return; }
+            const pin = prompt("Voer de Admin Code in: (Code is 1984)");
+            if (pin === "1984") { db.isAdminAuthenticated = true; } else { alert("Foutieve pincode."); }
+            save();
+        }
+
+        function adminDeleteLog(logId) {
+            if (!db.isAdminAuthenticated) return;
+            const idx = db.globalLogs.findIndex(l => l.id === logId);
+            if (idx === -1) return;
+            const log = db.globalLogs[idx];
+            if (confirm("Log verwijderen?")) {
+                const p = db.players[log.playerId];
+                if (p) { const r = p.replicas.find(rep => rep.id === log.replicaId); if (r) { r.kills = Math.max(0, r.kills - log.kills); r.deaths = Math.max(0, r.deaths - log.deaths); } }
+                db.globalLogs.splice(idx, 1); save();
+            }
+        }
+
+        function promptNewReplica() {
+            const name = prompt("Naam van de replica:"); if (!name) return;
+            db.players[db.activeUserId].replicas.push({ id: "rep_" + Date.now(), name: name.trim(), type: "AEG", kills: 0, deaths: 0 });
+            save();
+        }
+
+        function logSkirm() {
+            const repId = document.getElementById('skirm-replica-select').value;
+            const field = document.getElementById('skirm-field-select').value;
+            const k = parseInt(document.getElementById('skirm-kills').value) || 0;
+            const d = parseInt(document.getElementById('skirm-deaths').value) || 0;
+            if (!repId) return;
+            const p = db.players[db.activeUserId]; const r = p.replicas.find(rep => rep.id === repId);
+            r.kills += k; r.deaths += d;
+            db.globalLogs.unshift({ id: "log_" + Date.now(), playerId: p.id, playerName: p.name, fieldName: field, replicaId: r.id, replicaName: r.name, kills: k, deaths: d });
+            document.getElementById('skirm-kills').value = 0; document.getElementById('skirm-deaths').value = 0;
+            save();
+        }
+
+        function switchUser() { db.activeUserId = document.getElementById('current-user-select').value; db.isAdminAuthenticated = false; save(); }
+
+        function render() {
+            const currentPlayer = db.players[db.activeUserId];
+            const pIds = ['panel-leaderboard', 'panel-workstation', 'panel-logs', 'app-header'];
+            pIds.forEach(id => document.getElementById(id).classList.toggle('admin-glow', db.isAdminAuthenticated));
+            
+            document.getElementById('btn-admin-gate').innerText = db.isAdminAuthenticated ? "🔓 Sluit Admin" : "🔒 Admin Panel";
+            document.getElementById('current-user-select').innerHTML = Object.values(db.players).map(p => `<option value="${p.id}" ${p.id === db.activeUserId ? 'selected' : ''}>${p.name} [${p.role}]</option>`).join('');
+            document.getElementById('dashboard-user-title').innerText = currentPlayer.name;
+            document.getElementById('user-role-badge').innerText = currentPlayer.role;
+            document.getElementById('skirm-replica-select').innerHTML = currentPlayer.replicas.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+
+            document.getElementById('user-replica-grid').innerHTML = currentPlayer.replicas.map(r => `
+                <div class="p-3 bg-zinc-900 border border-zinc-800 rounded-lg flex justify-between">
+                    <span class="text-xs text-white">${r.name}</span>
+                    <span class="text-xs font-mono">K/D: ${(r.deaths === 0 ? r.kills : r.kills/r.deaths).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            let lbData = []; let fieldMap = {};
+            Object.values(db.players).forEach(p => {
+                let k = 0, d = 0; p.replicas.forEach(r => { k += r.kills; d += r.deaths; });
+                lbData.push({ name: p.name, kd: d === 0 ? k : k/d });
+            });
+            db.globalLogs.forEach(l => { if(!fieldMap[l.fieldName]) fieldMap[l.fieldName] = {k:0, d:0}; fieldMap[l.fieldName].k += l.kills; fieldMap[l.fieldName].d += l.deaths; });
+
+            lbData.sort((a,b) => b.kd - a.kd);
+            document.getElementById('leaderboard-list').innerHTML = lbData.map(p => `<div class="p-2 bg-zinc-950 rounded border border-zinc-800 text-xs flex justify-between"><span>${p.name}</span>font-bold <span>${p.kd.toFixed(2)}</span></div>`).join('');
+
+            const fields = ["Gasselte (The Outpost)", "Helenaveen (Bunker Hill)", "Veluwe (The Dark Forest)"];
+            document.getElementById('fields-stats-list').innerHTML = fields.map(f => { const s = fieldMap[f] || {k:0, d:0}; return `<div class="p-2 bg-zinc-950 rounded border border-zinc-800 text-xs flex justify-between"><span>${f}</span><span>${(s.d===0?s.k:s.k/s.d).toFixed(2)}</span></div>` }).join('');
+
+            document.getElementById('th-admin-actions').classList.toggle('hidden', !db.isAdminAuthenticated);
+            document.getElementById('global-activity-tbody').innerHTML = db.globalLogs.map(l => `
+                <tr class="border-b border-zinc-900 text-zinc-300">
+                    <td class="p-3 font-bold text-white">${l.playerName}</td>
+                    <td class="p-3">${l.fieldName}</td>
+                    <td class="p-3 text-zinc-500">${l.replicaName}</td>
+                    <td class="p-3 text-center text-green-400">+${l.kills}</td>
+                    <td class="p-3 text-center text-red-400">-${l.deaths}</td>
+                    ${db.isAdminAuthenticated ? `<td class="p-3 text-center"><button onclick="adminDeleteLog('${l.id}')" class="text-red-500 text-[10px] border border-red-900 px-1 rounded">🗑️</button></td>` : ''}
+                </tr>
+            `).join('');
+        }
+        render();
+    </script>
+    <script src="pwa-link.js"></script>
+</body>
+</html>
