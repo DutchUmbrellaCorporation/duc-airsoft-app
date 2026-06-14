@@ -44,6 +44,10 @@
     .btn-logout:hover { background-color: #3f3f46; }
     @media (max-width: 600px) { .header-box { flex-direction: column; text-align: center; gap: 16px; } .flex-row { flex-direction: column; } }
   </style>
+
+  <!-- Klassieke Firebase Scripts (Vercel-veilig) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -74,10 +78,7 @@
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, onSnapshot, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
       authDomain: "duc-airsoft-network.firebaseapp.com",
@@ -87,20 +88,21 @@
       appId: "1:208621488866:web:4c2a3db3f659167211acbb"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const statsDocRef = doc(db, "teamstats", "global");
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const statsDocRef = db.collection("teamstats").doc("global");
 
     let currentKills = 0;
     let currentDeaths = 0;
 
-    onSnapshot(statsDocRef, (docSnap) => {
-      if (docSnap.exists()) {
+    // Realtime database listener
+    statsDocRef.onSnapshot((docSnap) => {
+      if (docSnap.exists) {
         const data = docSnap.data();
         currentKills = data.kills || 0;
         currentDeaths = data.deaths || 0;
       } else {
-        setDoc(statsDocRef, { kills: 0, deaths: 0 });
+        statsDocRef.set({ kills: 0, deaths: 0 });
       }
       
       document.getElementById("stat-kills").innerText = currentKills;
@@ -111,16 +113,20 @@
     });
 
     document.getElementById("btn-add-kill").addEventListener("click", async () => {
-      try { await updateDoc(statsDocRef, { kills: increment(1) }); } catch (e) { console.error(e); }
+      try { 
+        await statsDocRef.update({ kills: firebase.firestore.FieldValue.increment(1) }); 
+      } catch (e) { console.error(e); }
     });
 
     document.getElementById("btn-add-death").addEventListener("click", async () => {
-      try { await updateDoc(statsDocRef, { deaths: increment(1) }); } catch (e) { console.error(e); }
+      try { 
+        await statsDocRef.update({ deaths: firebase.firestore.FieldValue.increment(1) }); 
+      } catch (e) { console.error(e); }
     });
 
     document.getElementById("btn-reset").addEventListener("click", async () => {
       if (confirm("Weet je zeker dat je alle teamstatistieken wilt resetten naar 0?")) {
-        try { await setDoc(statsDocRef, { kills: 0, deaths: 0 }); } catch (e) { console.error(e); }
+        try { await statsDocRef.set({ kills: 0, deaths: 0 }); } catch (e) { console.error(e); }
       }
     });
 

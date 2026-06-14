@@ -41,7 +41,7 @@
     }
     @keyframes spin { 100% { transform: rotate(360deg); } }
     .logo-dot { width: 28px; height: 28px; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); }
-    h1 { margin: 0; font-size: 22px; font-weight: 900; uppercase text-transform: uppercase; letter-spacing: 0.05em; }
+    h1 { margin: 0; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
     .subtitle { font-size: 11px; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; margin: 4px 0 24px 0; }
     .input-group { text-align: left; margin-bottom: 20px; }
     label { display: block; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #a1a1aa; margin-bottom: 6px; letter-spacing: 0.05em; }
@@ -75,6 +75,10 @@
     .nav-link { font-size: 12px; color: #71717a; margin-top: 20px; display: block; text-decoration: none; }
     .nav-link:hover { color: #a1a1aa; }
   </style>
+
+  <!-- Klassieke Firebase Scripts (Vercel-veilig) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
 <body>
 
@@ -97,10 +101,7 @@
     <a href="#" id="link-register" class="nav-link">Nieuwe operator? Registreer hier</a>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
       authDomain: "duc-airsoft-network.firebaseapp.com",
@@ -110,8 +111,9 @@
       appId: "1:208621488866:web:4c2a3db3f659167211acbb"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    // Firebase initialiseren via compat-methode
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
     // Inloggen
     document.getElementById("btn-login").addEventListener("click", async () => {
@@ -119,7 +121,7 @@
       const password = document.getElementById("password").value;
       
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        await auth.signInWithEmailAndPassword(email, password);
         window.location.href = "dashboard.html";
       } catch (error) {
         alert("Toegang geweigerd: Controleer je e-mail of code.");
@@ -138,7 +140,7 @@
       }
       
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await auth.createUserWithEmailAndPassword(email, password);
         alert("Operator succesvol geregistreerd! Je bent nu ingelogd.");
         window.location.href = "dashboard.html";
       } catch (error) {
