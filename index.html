@@ -5,77 +5,84 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dutch Umbrella Corp - Secure Gate</title>
   <style>
-    body {
-      background-color: #09090b;
-      color: #fafafa;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+    body { 
+      background-color: #09090b; 
+      color: #fafafa; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+      margin: 0; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
     }
-    .login-panel {
-      background-color: #111113;
-      border: 1px solid #27272a;
-      border-radius: 16px;
-      padding: 32px;
-      width: 100%;
-      max-width: 400px;
+    .login-panel { 
+      background-color: #111113; 
+      border: 1px solid #ef4444; 
+      border-radius: 16px; 
+      padding: 32px; 
+      width: 100%; 
+      max-width: 400px; 
+      text-align: center; 
       box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.05);
-      border-color: #ef4444;
-      text-align: center;
-      box-sizing: border-box;
+      box-sizing: border-box; 
     }
-    .logo-circle {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      border: 2px dashed #ef4444;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px auto;
-      animation: spin 20s linear infinite;
+    .logo-circle { 
+      width: 56px; 
+      height: 56px; 
+      border-radius: 50%; 
+      border: 2px dashed #ef4444; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      margin: 0 auto 20px auto; 
     }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
     .logo-dot { width: 28px; height: 28px; border-radius: 50%; background-color: rgba(239, 68, 68, 0.2); }
     h1 { margin: 0; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; }
     .subtitle { font-size: 11px; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; margin: 4px 0 24px 0; }
     .input-group { text-align: left; margin-bottom: 20px; }
     label { display: block; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #a1a1aa; margin-bottom: 6px; letter-spacing: 0.05em; }
-    input {
-      width: 100%;
-      padding: 12px;
-      background-color: #09090b;
-      border: 1px solid #27272a;
-      border-radius: 8px;
-      color: white;
-      font-size: 14px;
-      box-sizing: border-box;
+    input { 
+      width: 100%; 
+      padding: 12px; 
+      background-color: #09090b; 
+      border: 1px solid #27272a; 
+      border-radius: 8px; 
+      color: white; 
+      font-size: 14px; 
+      box-sizing: border-box; 
     }
     input:focus { outline: none; border-color: #ef4444; }
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background-color: #dc2626;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background-color 0.2s;
+    .btn-submit { 
+      width: 100%; 
+      padding: 14px; 
+      background-color: #dc2626; 
+      color: white; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 13px; 
+      font-weight: 900; 
+      text-transform: uppercase; 
+      letter-spacing: 0.1em; 
+      cursor: pointer; 
+      margin-top: 10px; 
     }
     .btn-submit:hover { background-color: #ef4444; }
-    .nav-link { font-size: 12px; color: #71717a; margin-top: 20px; display: block; text-decoration: none; }
-    .nav-link:hover { color: #a1a1aa; }
+    
+    .link-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 12px;
+    }
+    .nav-link { 
+      color: #71717a; 
+      text-decoration: none; 
+    }
+    .nav-link:hover { 
+      color: #a1a1aa; 
+      text-decoration: underline;
+    }
   </style>
-
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 </head>
@@ -97,11 +104,14 @@
     </div>
     
     <button id="btn-login" class="btn-submit">Verifieer Identiteit</button>
-    <a href="#" id="link-register" class="nav-link">Nieuwe operator? Registreer hier</a>
+    
+    <div class="link-container">
+      <a href="#" id="link-forgot" class="nav-link">Wachtwoord vergeten?</a>
+      <a href="#" id="link-register" class="nav-link">Nieuwe operator? Registreer hier</a>
+    </div>
   </div>
 
   <script>
-    // Jouw Firebase configuratie
     const firebaseConfig = {
       apiKey: "AIzaSyBSsemNAprUypHzECJ48SXRpYGCWY3ilIs",
       authDomain: "duc-airsoft-network.firebaseapp.com",
@@ -110,27 +120,15 @@
       messagingSenderId: "208621488866",
       appId: "1:208621488866:web:4c2a3db3f659167211acbb"
     };
-
-    // Firebase correct opstarten volgens de compat-methode
     firebase.initializeApp(firebaseConfig);
 
     // Inloggen
     document.getElementById("btn-login").addEventListener("click", function() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-      
-      if (!email || !password) {
-        alert("Vul een e-mailadres en toegangscode in.");
-        return;
-      }
-
       firebase.auth().signInWithEmailAndPassword(email, password)
-        .then(function() {
-          window.location.href = "dashboard.html";
-        })
-        .catch(function(error) {
-          alert("Toegang geweigerd: " + error.message);
-        });
+        .then(() => { window.location.href = "dashboard.html"; })
+        .catch(err => { alert("Toegang geweigerd: " + err.message); });
     });
 
     // Registreren
@@ -138,19 +136,27 @@
       e.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => { window.location.href = "dashboard.html"; })
+        .catch(err => { alert("Registratie mislukt: " + err.message); });
+    });
+
+    // Wachtwoord herstellen via e-mail
+    document.getElementById("link-forgot").addEventListener("click", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
       
-      if (!email || !password) {
-        alert("Vul eerst een e-mail en wachtwoord in om te registreren.");
+      if (!email) {
+        alert("Vul eerst je e-mailadres in bij 'Operator E-mail' om een herstellink te ontvangen.");
         return;
       }
-      
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(function() {
-          alert("Operator succesvol geregistreerd! Je wordt nu doorgestuurd.");
-          window.location.href = "dashboard.html";
+
+      firebase.auth().sendPasswordResetEmail(email)
+        .then(() => {
+          alert("Er is succesvol een herstellink gestuurd naar: " + email + "\\nCheck ook je spambox!");
         })
-        .catch(function(error) {
-          alert("Registratie mislukt: " + error.message);
+        .catch(err => {
+          alert("Fout bij versturen: " + err.message);
         });
     });
   </script>
